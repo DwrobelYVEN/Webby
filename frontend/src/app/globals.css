@@ -1,0 +1,56 @@
+:root {
+  --ink: #16241f;
+  --paper: #fbfaf7;
+  --accent: #2f6f4f;
+  --border: #dcd8cd;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.site-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 32px;
+  border-bottom: 1px solid var(--border);
+}
+.site-nav .brand { font-weight: 700; text-decoration: none; color: var(--ink); }
+.site-nav nav { display: flex; gap: 24px; }
+.site-nav nav a { color: var(--ink); text-decoration: none; font-size: 14px; }
+
+main { max-width: 960px; margin: 0 auto; padding: 40px 32px; }
+
+.card {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 16px;
+  background: white;
+}
+
+.btn {
+  display: inline-block;
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+.field label { font-size: 13px; font-weight: 600; }
+.field input, .field select, .field textarea {
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 14px;
+}

@@ -1,0 +1,69 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: yven
+      POSTGRES_PASSWORD: yven
+      POSTGRES_DB: yven
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U yven"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  meilisearch:
+    image: getmeili/meilisearch:v1.8
+    environment:
+      MEILI_MASTER_KEY: dev-only-key-change-me
+    ports:
+      - "7700:7700"
+    volumes:
+      - meilidata:/meili_data
+
+  backend:
+    build: ./backend
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    environment:
+      PORT: 8080
+      DATABASE_URL: postgres://yven:yven@postgres:5432/yven?sslmode=disable
+      REDIS_URL: redis://redis:6379/0
+      MEILISEARCH_HOST: http://meilisearch:7700
+      MEILISEARCH_KEY: dev-only-key-change-me
+      AUTH0_DOMAIN: ${AUTH0_DOMAIN}
+      AUTH0_AUDIENCE: ${AUTH0_AUDIENCE}
+      AZURE_STORAGE_ACCOUNT: ${AZURE_STORAGE_ACCOUNT}
+      AZURE_STORAGE_KEY: ${AZURE_STORAGE_KEY}
+      RESEND_API_KEY: ${RESEND_API_KEY}
+      TWILIO_SID: ${TWILIO_SID}
+      TWILIO_TOKEN: ${TWILIO_TOKEN}
+      POSTHOG_API_KEY: ${POSTHOG_API_KEY}
+    ports:
+      - "8080:8080"
+
+  frontend:
+    build: ./frontend
+    depends_on:
+      - backend
+    environment:
+      NEXT_PUBLIC_API_BASE_URL: http://localhost:8080/api/v1
+    ports:
+      - "3000:3000"
+
+volumes:
+  pgdata:
+  meilidata:

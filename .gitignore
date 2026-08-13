@@ -1,0 +1,16 @@
+# env
+.env
+.env.local
+
+# node
+node_modules/
+.next/
+out/
+
+# go
+backend/yven-server
+backend/*.exe
+
+# misc
+.DS_Store
+*.log
