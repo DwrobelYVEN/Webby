@@ -1,9 +1,9 @@
 # --- build stage ---
 FROM golang:1.22-alpine AS build
 WORKDIR /app
-COPY go.mod ./
-RUN go mod download || true
+RUN apk add --no-cache git ca-certificates
 COPY . .
+RUN go mod tidy
 RUN CGO_ENABLED=0 GOOS=linux go build -o /yven-server ./cmd/server
 
 # --- run stage ---
